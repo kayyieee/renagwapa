@@ -1,21 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
   const [count, setCount] = useState(0);
   const [numbers, setNumbers] = useState(['']);
   const [result, setResult] = useState(null);
-  const [todos, setTodos] = useState([]);
-  const [todoInput, setTodoInput] = useState('');
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const res = await fetch('https://jsonplaceholder.typicode.com/todos');
-      const data = await res.json();
-      setTodos(data.slice(0, 10));
-    };
-    fetchTodos();
-  }, []);
 
   const handleIncrement = () => setCount(count + 1);
   const handleDecrement = () => count > 0 && setCount(count - 1);
@@ -66,26 +55,6 @@ function App() {
     setNumbers(updatedNumbers);
   };
 
-  const handleAddTodo = () => {
-    if (todoInput.trim()) {
-      const newTodo = { id: todos.length + 1, title: todoInput, completed: false };
-      setTodos([newTodo, ...todos]);
-      setTodoInput('');
-    }
-  };
-
-  const handleToggleTodo = (id) => {
-    const updatedTodos = todos.map(todo =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    );
-    setTodos(updatedTodos);
-  };
-
-  const handleDeleteTodo = (id) => {
-    const updatedTodos = todos.filter(todo => todo.id !== id);
-    setTodos(updatedTodos);
-  };
-
   return (
     <div className="container">
       <div className="glass-card">
@@ -121,30 +90,6 @@ function App() {
             <button className="btn" onClick={() => handleCalculator('divide')}>Divide</button>
           </div>
           <p>Result: {result}</p>
-        </div>
-      </div>
-
-      <div className="glass-card">
-        <h2>To-Do List</h2>
-        <input
-          type="text"
-          placeholder="Add a new to-do"
-          value={todoInput}
-          onChange={(e) => setTodoInput(e.target.value)}
-        />
-        <button className="btn" onClick={handleAddTodo}>Add Todo</button>
-        <div className="todo-list">
-          {todos.map(todo => (
-            <div key={todo.id} className="todo-item">
-              <input
-                type="checkbox"
-                checked={todo.completed}
-                onChange={() => handleToggleTodo(todo.id)}
-              />
-              <span className={todo.completed ? 'completed' : ''}>{todo.title}</span>
-              <button className="delete-btn" onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
-            </div>
-          ))}
         </div>
       </div>
     </div>
